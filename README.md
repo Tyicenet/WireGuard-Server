@@ -6,7 +6,6 @@ This guide outlines the process of deploying a lightweight, high-speed WireGuard
 - https://cloud.linode.com/linodes/67114829
 - On my VM, I SSH’d into my sever.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/b49cb974-2f0e-4539-b36c-a17198498168/image.png)
 
 # 1. **Install WireGuard Tools**
 
@@ -73,7 +72,7 @@ deJ0r0QVoCcYSoXkYefF5Z38d9lEJbqjEyd+navMSFA=
 - The `< privatekey` means the input is the private key file, and `> publickey` saves the generated public key into the `publickey` file.
 - The public key is safe to share with peers (other devices connecting to the VPN).
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/8ec31dc8-e72c-4f71-8a0a-8c9f62454bd0/image.png)
+
 
 ### 7. **Create the WireGuard Configuration File**
 
@@ -200,7 +199,7 @@ MTU = 1420
 cat wg0.conf
 ```
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/8c59ca71-74fc-4200-b066-d3d2a442457d/image.png)
+
 
 ### 9. **Enable the WireGuard Interface to Start on Boot**
 
@@ -235,7 +234,7 @@ sudo nano /etc/sysctl.conf
 - This command opens the system configuration file `/etc/sysctl.conf` in `vim` to enable or modify system parameters.
 - In this file, you will enable IP forwarding by uncommenting (removing the `#` symbol) the line that specifies IP forwarding for IPv4 traffic.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/6ffc7e79-62e7-44c6-b0e8-178188a1f02c/image.png)
+
 
 - This setting enables IPv4 forwarding on your system, allowing the server to route packets between different network interfaces.
 - We get rid of the # because if we dont the program wont read the script. If the script sees a # it skips that line.
@@ -265,7 +264,6 @@ sysctl -a | grep ip_forward
     
     - `net.ipv4.ip_forward = 1` confirms that IPv4 forwarding is enabled.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/84284cc7-1197-4785-b763-ea808076573a/image.png)
 
 ---
 
@@ -281,7 +279,7 @@ ufw status
 
 - This command shows the status of the firewall and its current active rules. You can see whether it's enabled and which ports are allowed or blocked.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/63f2c7ae-d336-4eb4-86d3-0f09adf931c4/image.png)
+
 
 ### Command 2: Allow UDP Traffic on Port 51820
 
@@ -298,7 +296,7 @@ sudo ufw enable #click yes afterwards
 ufw status #check to see if everything is working
 ```
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/239d4e04-da4d-4b85-86bf-4f4b10376480/image.png)
+
 
 ### Command 3: Set Default Rule to Allow Forwarding
 
@@ -316,7 +314,7 @@ ip -br a
 
 - This command shows the network interfaces on your server. You'll use this to see which interface is connected to the VPN (`wg0` in this case) and to check the IP addresses of your network interfaces.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/8365a255-a86a-4b76-bc06-fa364b317fd4/image.png)
+
 
 ### Command 5: Edit `before.rules` for NAT (Network Address Translation) Configuration
 
@@ -344,7 +342,7 @@ COMMIT
 - Replace `{EXTERNAL_INTERFACE}` with the name of the network interface that connects to the internet (e.g., `eth0` or `ens3`).
 - These NAT rules enable the server to masquerade (perform source NAT) so that VPN clients can use the server’s IP address when accessing external networks.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/7fa8f3e7-3f01-404b-a02c-571c3a37d7d6/image.png)
+
 
 ### Command 7: Save and Quit
 
@@ -383,7 +381,7 @@ sudo iptables -L -v -n -t nat
 - This command lists all **NAT** table rules in **iptables**, with detailed information (`v`) and numeric output (`n`).
 - You should see the NAT rule you added earlier in the `POSTROUTING` chain, ensuring that the server can properly handle and forward traffic from the VPN to the internet.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/91564310-3b15-410a-a256-0dab5242f405/image.png)
+
 
 The command `sudo iptables -L -v -n -t nat` is used to list (display) the current firewall rules in the `nat` (Network Address Translation) table of `iptables`, with additional details.
 
@@ -493,7 +491,7 @@ chmod 600 client1key
 - `wg pubkey < client1key > client1pub`: Uses the **private key** from the file `client1key` to generate the corresponding **public key** and saves it to `client1pub`.
 - These keys are required for authenticating the client on the server.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/d9cc2e61-c37f-4555-b3ac-e90d5cb154a6/image.png)
+
 
 ### 4. **Client Configuration File: `client1.conf`**
 
@@ -534,7 +532,7 @@ Let’s break down what each section means:
     - `AllowedIPs = 0.0.0.0/0`: This routes all traffic through the VPN. `0.0.0.0/0` means all IPv4 addresses.
     - `PersistentKeepalive = 25`: This keeps the connection alive by sending a packet every 25 seconds, which helps maintain the VPN connection through NAT or firewalls.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/ff2269c5-0c6e-445e-8e37-799f0a429504/image.png)
+
 
 ### 5. **Save and Quit `vim` Editor**
 
@@ -569,7 +567,7 @@ cat ../wg0.conf
 
 - This command outputs the content of the WireGuard server's configuration file (`wg0.conf`), so you can verify that the settings are correct and that the client has been added properly as a peer.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/f2b838e3-b692-41ff-82c0-990012592b8d/image.png)
+
 
 # !!!STOP!!!
 
@@ -584,7 +582,7 @@ Visit the official WireGuard website.
 Download the Windows installer and run it.
 Follow the prompts to complete the installation.
 
-![image.png](attachment:f1510e75-5008-49b8-baf7-aaebc87f3090:image.png)
+
 
 2. Obtain the Configuration File
 Get the .conf file from your VPN provider or generate it manually if you're setting up your own WireGuard server.
@@ -595,7 +593,7 @@ Open the WireGuard app on your Windows PC.
 Click “Import Tunnel(s) from File” or drag and drop the .conf file into the WireGuard window.
 Give the tunnel a name if prompted.
 
-![image.png](attachment:de26afad-8550-4118-9942-a0e40d810dcc:image.png)
+
 
 4. Activate the Tunnel
 Click the toggle switch to activate the tunnel.
@@ -1070,8 +1068,8 @@ Sometimes, simply restarting the WireGuard service can resolve connection issues
 
 ### 
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/ccc870ae-7c8e-4df5-95a0-ca4999547fbe/5b73ca03-a999-455f-a252-c78e38c825ea/image.png)
 
-This shows that another device is connected.
+
+
 
 All done
